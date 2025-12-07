@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paper Maker - Free Printable Paper Generator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="app-header">
+        <div class="header-content">
+            <div class="header-text">
+                <h1>Paper Maker</h1>
+                <p class="subtitle">Create custom printable paper</p>
+            </div>
+            <div class="action-buttons">
+                <button id="printButton" class="btn-primary">Print / Save as PDF</button>
+                <button id="resetButton" class="btn-secondary">Reset to Defaults</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Preview Area -->
+        <main class="preview-area">
+            <div class="preview-header">
+                <h2>Preview</h2>
+                <p class="preview-note">This is a scaled preview. Actual print will be full size.</p>
+            </div>
+            <div class="preview-container">
+                <div id="paperPreview" class="paper-sheet"></div>
+            </div>
+        </main>
+
+        <!-- Controls Panel -->
+        <aside class="controls-panel">
+            <div class="controls-section">
+                <h2>Paper Type</h2>
+                <div class="control-group">
+                    <label>
+                        <input type="radio" name="paperType" value="lined" checked>
+                        <span>Lined Paper</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="paperType" value="graph">
+                        <span>Graph Paper</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="paperType" value="dot">
+                        <span>Dot Paper</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="controls-section">
+                <h2>Paper Size</h2>
+                <div class="control-group">
+                    <label>
+                        <input type="radio" name="paperSize" value="letter" checked>
+                        <span>Letter (8.5" × 11")</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="paperSize" value="a4">
+                        <span>A4 (210mm × 297mm)</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="controls-section">
+                <h2>Orientation</h2>
+                <div class="control-group">
+                    <label>
+                        <input type="radio" name="orientation" value="portrait" checked>
+                        <span>Portrait</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="orientation" value="landscape">
+                        <span>Landscape</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="controls-section" id="linedControls">
+                <h2>Line Spacing</h2>
+                <div class="control-group">
+                    <label>
+                        <input type="radio" name="lineSpacing" value="wide" checked>
+                        <span>Wide-ruled (11/32")</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="lineSpacing" value="college">
+                        <span>College-ruled (9/32")</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="lineSpacing" value="narrow">
+                        <span>Narrow-ruled (1/4")</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="controls-section hidden" id="graphControls">
+                <h2>Grid Size</h2>
+                <div class="control-group">
+                    <label>
+                        <input type="radio" name="gridSize" value="2" checked>
+                        <span>2 lines per inch</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="gridSize" value="4">
+                        <span>4 lines per inch</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="gridSize" value="5">
+                        <span>5 lines per inch</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="gridSize" value="10">
+                        <span>10 lines per inch</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="controls-section hidden" id="dotControls">
+                <h2>Dot Spacing</h2>
+                <div class="control-group">
+                    <label>
+                        <input type="radio" name="dotSpacing" value="2" checked>
+                        <span>2 dots per inch</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="dotSpacing" value="3">
+                        <span>3 dots per inch</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="dotSpacing" value="4">
+                        <span>4 dots per inch</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="dotSpacing" value="5">
+                        <span>5 dots per inch</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="controls-section">
+                <h2>Margins (inches)</h2>
+                <div class="margin-controls">
+                    <div class="margin-input">
+                        <label for="marginTop">Top</label>
+                        <input type="number" id="marginTop" value="0.5" min="0" max="2" step="0.125">
+                    </div>
+                    <div class="margin-input">
+                        <label for="marginBottom">Bottom</label>
+                        <input type="number" id="marginBottom" value="0.5" min="0" max="2" step="0.125">
+                    </div>
+                    <div class="margin-input">
+                        <label for="marginLeft">Left</label>
+                        <input type="number" id="marginLeft" value="0.75" min="0" max="2" step="0.125">
+                    </div>
+                    <div class="margin-input">
+                        <label for="marginRight">Right</label>
+                        <input type="number" id="marginRight" value="0.5" min="0" max="2" step="0.125">
+                    </div>
+                </div>
+            </div>
+
+            <div class="controls-section">
+                <h2>Appearance</h2>
+                <div class="appearance-controls">
+                    <div class="appearance-input">
+                        <label for="lineColor">Line Color</label>
+                        <input type="color" id="lineColor" value="#0000ff">
+                    </div>
+                    <div class="appearance-input">
+                        <label for="lineThickness">Line Thickness</label>
+                        <input type="range" id="lineThickness" min="0.5" max="3" step="0.5" value="1">
+                        <span id="lineThicknessValue">1px</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <script src="templates.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
+
