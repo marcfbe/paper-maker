@@ -7,8 +7,42 @@ class PaperMaker {
     constructor() {
         this.config = this.getDefaultConfig();
         this.initializeElements();
+        this.initializeSlider();
         this.attachEventListeners();
         this.updatePreview();
+    }
+
+    /**
+     * Initialize slider settings based on paper size
+     */
+    initializeSlider() {
+        if (this.config.paperSize === 'a4') {
+            this.lineSpacingInput.min = '5';
+            this.lineSpacingInput.max = '12';
+            this.lineSpacingInput.step = '0.5';
+            // Default is 9mm for A4 (equivalent to 11/32")
+            if (this.config.lineSpacing === 0.34375) {
+                this.config.lineSpacing = 9;
+            }
+            this.gridSizeInput.min = '2.5';
+            this.gridSizeInput.max = '10';
+            this.gridSizeInput.step = '0.5';
+            // Default is 10mm for A4 (equivalent to 2 lines/inch)
+            if (this.config.gridSize === 0.5) {
+                this.config.gridSize = 10;
+            }
+        } else {
+            this.lineSpacingInput.min = '0.25';
+            this.lineSpacingInput.max = '0.5';
+            this.lineSpacingInput.step = '0.03125';
+            this.gridSizeInput.min = '0.1';
+            this.gridSizeInput.max = '0.5';
+            this.gridSizeInput.step = '0.05';
+        }
+        this.lineSpacingInput.value = this.config.lineSpacing;
+        this.gridSizeInput.value = this.config.gridSize;
+        this.updateLineSpacingLabel();
+        this.updateGridSizeLabel();
     }
 
     /**
@@ -19,8 +53,8 @@ class PaperMaker {
             paperType: 'lined',
             paperSize: 'letter',
             orientation: 'portrait',
-            lineSpacing: 'wide',
-            gridSize: 2,
+            lineSpacing: 0.34375, // 11/32" in inches, or 9mm for A4
+            gridSize: 0.5, // 0.5" spacing (2 lines/inch) for letter, or 10mm for A4
             dotSpacing: 2,
             margins: {
                 top: 0.5,
@@ -48,10 +82,12 @@ class PaperMaker {
         this.orientationInputs = document.querySelectorAll('input[name="orientation"]');
 
         // Line spacing (for lined paper)
-        this.lineSpacingInputs = document.querySelectorAll('input[name="lineSpacing"]');
+        this.lineSpacingInput = document.getElementById('lineSpacing');
+        this.lineSpacingValue = document.getElementById('lineSpacingValue');
 
         // Grid size (for graph paper)
-        this.gridSizeInputs = document.querySelectorAll('input[name="gridSize"]');
+        this.gridSizeInput = document.getElementById('gridSize');
+        this.gridSizeValue = document.getElementById('gridSizeValue');
 
         // Dot spacing (for dot paper)
         this.dotSpacingInputs = document.querySelectorAll('input[name="dotSpacing"]');
@@ -91,7 +127,39 @@ class PaperMaker {
         // Paper size
         this.paperSizeInputs.forEach(input => {
             input.addEventListener('change', () => {
+                const oldSize = this.config.paperSize;
                 this.config.paperSize = input.value;
+                // Convert line spacing when switching between letter and A4
+                if (oldSize !== this.config.paperSize) {
+                    if (oldSize === 'letter' && this.config.paperSize === 'a4') {
+                        // Convert inches to mm
+                        this.config.lineSpacing = Math.round((this.config.lineSpacing * 25.4) * 10) / 10; // Round to 0.1mm
+                        this.lineSpacingInput.min = '5';
+                        this.lineSpacingInput.max = '12';
+                        this.lineSpacingInput.step = '0.5';
+                        // Convert grid size from inches to mm
+                        this.config.gridSize = Math.round((this.config.gridSize * 25.4) * 10) / 10; // Round to 0.1mm
+                        this.gridSizeInput.min = '2.5';
+                        this.gridSizeInput.max = '10';
+                        this.gridSizeInput.step = '0.5';
+                    } else if (oldSize === 'a4' && this.config.paperSize === 'letter') {
+                        // Convert mm to inches
+                        this.config.lineSpacing = Math.round((this.config.lineSpacing / 25.4) * 10000) / 10000; // Round to nearest 1/32"
+                        this.lineSpacingInput.min = '0.25';
+                        this.lineSpacingInput.max = '0.5';
+                        this.lineSpacingInput.step = '0.03125';
+                        // Convert grid size from mm to inches
+                        this.config.gridSize = Math.round((this.config.gridSize / 25.4) * 10000) / 10000; // Round to nearest 1/32"
+                        this.gridSizeInput.min = '0.1';
+                        this.gridSizeInput.max = '0.5';
+                        this.gridSizeInput.step = '0.05';
+                    }
+                    this.lineSpacingInput.value = this.config.lineSpacing;
+                    this.gridSizeInput.value = this.config.gridSize;
+                }
+                this.updateUnitLabels();
+                this.updateLineSpacingLabel();
+                this.updateGridSizeLabel();
                 this.updatePreview();
             });
         });
@@ -105,19 +173,25 @@ class PaperMaker {
         });
 
         // Line spacing
-        this.lineSpacingInputs.forEach(input => {
-            input.addEventListener('change', () => {
-                this.config.lineSpacing = input.value;
-                this.updatePreview();
-            });
+        this.lineSpacingInput.addEventListener('input', () => {
+            const value = parseFloat(this.lineSpacingInput.value);
+            if (this.config.paperSize === 'a4') {
+                // Store as mm for A4
+                this.config.lineSpacing = value;
+            } else {
+                // Store as inches for letter
+                this.config.lineSpacing = value;
+            }
+            this.updateLineSpacingLabel();
+            this.updatePreview();
         });
 
         // Grid size
-        this.gridSizeInputs.forEach(input => {
-            input.addEventListener('change', () => {
-                this.config.gridSize = parseInt(input.value);
-                this.updatePreview();
-            });
+        this.gridSizeInput.addEventListener('input', () => {
+            const value = parseFloat(this.gridSizeInput.value);
+            this.config.gridSize = value;
+            this.updateGridSizeLabel();
+            this.updatePreview();
         });
 
         // Dot spacing
@@ -192,6 +266,81 @@ class PaperMaker {
                 this.dotControls.classList.remove('hidden');
                 break;
         }
+        this.updateUnitLabels();
+    }
+
+    /**
+     * Update line spacing label with current value
+     */
+    updateLineSpacingLabel() {
+        const value = parseFloat(this.config.lineSpacing);
+        if (this.config.paperSize === 'a4') {
+            // Display in mm
+            this.lineSpacingValue.textContent = `${value.toFixed(1)}mm`;
+        } else {
+            // Display in inches, show as fraction if possible
+            const fraction = this.inchesToFraction(value);
+            this.lineSpacingValue.textContent = fraction || `${value.toFixed(3)}"`;
+        }
+    }
+
+    /**
+     * Update grid size label with current value
+     */
+    updateGridSizeLabel() {
+        const value = parseFloat(this.config.gridSize);
+        if (this.config.paperSize === 'a4') {
+            // Display in mm
+            this.gridSizeValue.textContent = `${value.toFixed(1)}mm grid`;
+        } else {
+            // Display as lines per inch
+            const linesPerInch = 1 / value;
+            this.gridSizeValue.textContent = `${linesPerInch.toFixed(1)} lines per inch`;
+        }
+    }
+
+    /**
+     * Convert decimal inches to fraction string
+     */
+    inchesToFraction(inches) {
+        const commonFractions = {
+            0.25: '1/4"',
+            0.28125: '9/32"',
+            0.3125: '5/16"',
+            0.34375: '11/32"',
+            0.375: '3/8"',
+            0.40625: '13/32"',
+            0.4375: '7/16"',
+            0.46875: '15/32"',
+            0.5: '1/2"'
+        };
+        // Check for exact match or very close match (within 0.001)
+        for (const [dec, frac] of Object.entries(commonFractions)) {
+            if (Math.abs(inches - parseFloat(dec)) < 0.001) {
+                return frac;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Update unit labels based on paper size (inches for letter, mm for A4)
+     */
+    updateUnitLabels() {
+        // Update line spacing label
+        this.updateLineSpacingLabel();
+
+        // Update grid size label
+        this.updateGridSizeLabel();
+
+        // Update dot spacing labels
+        const isA4 = this.config.paperSize === 'a4';
+        this.dotSpacingInputs.forEach(input => {
+            const span = input.parentElement.querySelector('span');
+            if (span && span.hasAttribute(`data-${isA4 ? 'a4' : 'letter'}`)) {
+                span.textContent = span.getAttribute(`data-${isA4 ? 'a4' : 'letter'}`);
+            }
+        });
     }
 
     /**
@@ -263,14 +412,40 @@ class PaperMaker {
         });
 
         // Reset line spacing
-        this.lineSpacingInputs.forEach(input => {
-            input.checked = input.value === this.config.lineSpacing;
-        });
+        // Set slider min/max/step based on paper size
+        if (this.config.paperSize === 'a4') {
+            this.lineSpacingInput.min = '5';
+            this.lineSpacingInput.max = '12';
+            this.lineSpacingInput.step = '0.5';
+            // Default is 9mm for A4 (equivalent to 11/32")
+            this.config.lineSpacing = 9;
+        } else {
+            this.lineSpacingInput.min = '0.25';
+            this.lineSpacingInput.max = '0.5';
+            this.lineSpacingInput.step = '0.03125';
+            // Default is 11/32" for letter
+            this.config.lineSpacing = 0.34375;
+        }
+        this.lineSpacingInput.value = this.config.lineSpacing;
+        this.updateLineSpacingLabel();
 
         // Reset grid size
-        this.gridSizeInputs.forEach(input => {
-            input.checked = parseInt(input.value) === this.config.gridSize;
-        });
+        // Set slider min/max/step based on paper size
+        if (this.config.paperSize === 'a4') {
+            this.gridSizeInput.min = '2.5';
+            this.gridSizeInput.max = '10';
+            this.gridSizeInput.step = '0.5';
+            // Default is 10mm for A4 (equivalent to 2 lines/inch)
+            this.config.gridSize = 10;
+        } else {
+            this.gridSizeInput.min = '0.1';
+            this.gridSizeInput.max = '0.5';
+            this.gridSizeInput.step = '0.05';
+            // Default is 0.5" for letter (2 lines/inch)
+            this.config.gridSize = 0.5;
+        }
+        this.gridSizeInput.value = this.config.gridSize;
+        this.updateGridSizeLabel();
 
         // Reset dot spacing
         this.dotSpacingInputs.forEach(input => {
@@ -296,6 +471,9 @@ class PaperMaker {
 
 // Initialize the application when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
-    new PaperMaker();
+    const app = new PaperMaker();
+    // Update labels on initial load
+    app.updateUnitLabels();
 });
+
 

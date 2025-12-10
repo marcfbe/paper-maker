@@ -52,13 +52,15 @@ const PaperTemplates = {
         const marginLeft = margins.left * dpi;
         const marginRight = margins.right * dpi;
 
-        // Line spacing in inches
-        const spacingMap = {
-            wide: 11 / 32,      // 0.34375 inches
-            college: 9 / 32,    // 0.28125 inches
-            narrow: 1 / 4       // 0.25 inches
-        };
-        const spacing = spacingMap[lineSpacing] * dpi;
+        // Line spacing - inches for letter, mm for A4
+        let spacing;
+        if (paperSize === 'a4') {
+            // lineSpacing is in mm, convert to pixels
+            spacing = (lineSpacing / 25.4) * dpi;
+        } else {
+            // lineSpacing is in inches, convert to pixels
+            spacing = lineSpacing * dpi;
+        }
 
         // Calculate drawable area
         const startY = marginTop;
@@ -113,8 +115,15 @@ const PaperTemplates = {
         const marginLeft = margins.left * dpi;
         const marginRight = margins.right * dpi;
 
-        // Grid spacing in pixels
-        const spacing = dpi / gridSize;
+        // Grid spacing - inches for letter, mm for A4
+        let spacing;
+        if (paperSize === 'a4') {
+            // gridSize is in mm, convert to pixels
+            spacing = (gridSize / 25.4) * dpi;
+        } else {
+            // gridSize is in inches, convert to pixels
+            spacing = gridSize * dpi;
+        }
 
         // Calculate drawable area
         const startY = marginTop;
@@ -181,8 +190,22 @@ const PaperTemplates = {
         const marginLeft = margins.left * dpi;
         const marginRight = margins.right * dpi;
 
-        // Dot spacing in pixels
-        const spacing = dpi / dotSpacing;
+        // Dot spacing - inches for letter, mm for A4
+        let spacing;
+        if (paperSize === 'a4') {
+            // Convert to millimeters
+            const dotSpacingMapMM = {
+                2: 12.7,  // 12.7mm spacing (equivalent to 2 dots/inch)
+                3: 8.5,   // 8.5mm spacing (equivalent to 3 dots/inch)
+                4: 6.4,   // 6.4mm spacing (equivalent to 4 dots/inch)
+                5: 5.0    // 5mm spacing (equivalent to 5 dots/inch)
+            };
+            const mmSpacing = dotSpacingMapMM[dotSpacing];
+            spacing = (mmSpacing / 25.4) * dpi; // Convert mm to pixels
+        } else {
+            // Use inches for letter
+            spacing = dpi / dotSpacing;
+        }
 
         // Calculate drawable area
         const startY = marginTop;

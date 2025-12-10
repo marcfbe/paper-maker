@@ -83,40 +83,22 @@
             <div class="controls-section" id="linedControls">
                 <h2>Line Spacing</h2>
                 <div class="control-group">
-                    <label>
-                        <input type="radio" name="lineSpacing" value="wide" checked>
-                        <span>Wide-ruled (11/32")</span>
-                    </label>
-                    <label>
-                        <input type="radio" name="lineSpacing" value="college">
-                        <span>College-ruled (9/32")</span>
-                    </label>
-                    <label>
-                        <input type="radio" name="lineSpacing" value="narrow">
-                        <span>Narrow-ruled (1/4")</span>
-                    </label>
+                    <div class="appearance-input">
+                        <label for="lineSpacing">Line Spacing</label>
+                        <input type="range" id="lineSpacing" min="0.25" max="0.5" step="0.03125" value="0.34375">
+                        <span id="lineSpacingValue">11/32"</span>
+                    </div>
                 </div>
             </div>
 
             <div class="controls-section hidden" id="graphControls">
                 <h2>Grid Size</h2>
                 <div class="control-group">
-                    <label>
-                        <input type="radio" name="gridSize" value="2" checked>
-                        <span>2 lines per inch</span>
-                    </label>
-                    <label>
-                        <input type="radio" name="gridSize" value="4">
-                        <span>4 lines per inch</span>
-                    </label>
-                    <label>
-                        <input type="radio" name="gridSize" value="5">
-                        <span>5 lines per inch</span>
-                    </label>
-                    <label>
-                        <input type="radio" name="gridSize" value="10">
-                        <span>10 lines per inch</span>
-                    </label>
+                    <div class="appearance-input">
+                        <label for="gridSize">Grid Size</label>
+                        <input type="range" id="gridSize" min="0.1" max="0.5" step="0.05" value="0.5">
+                        <span id="gridSizeValue">2 lines per inch</span>
+                    </div>
                 </div>
             </div>
 
@@ -125,19 +107,19 @@
                 <div class="control-group">
                     <label>
                         <input type="radio" name="dotSpacing" value="2" checked>
-                        <span>2 dots per inch</span>
+                        <span data-letter="2 dots per inch" data-a4="12.7mm spacing">2 dots per inch</span>
                     </label>
                     <label>
                         <input type="radio" name="dotSpacing" value="3">
-                        <span>3 dots per inch</span>
+                        <span data-letter="3 dots per inch" data-a4="8.5mm spacing">3 dots per inch</span>
                     </label>
                     <label>
                         <input type="radio" name="dotSpacing" value="4">
-                        <span>4 dots per inch</span>
+                        <span data-letter="4 dots per inch" data-a4="6.4mm spacing">4 dots per inch</span>
                     </label>
                     <label>
                         <input type="radio" name="dotSpacing" value="5">
-                        <span>5 dots per inch</span>
+                        <span data-letter="5 dots per inch" data-a4="5mm spacing">5 dots per inch</span>
                     </label>
                 </div>
             </div>

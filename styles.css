@@ -399,11 +399,14 @@ body {
 
     .paper-sheet {
         box-shadow: none !important;
-        page-break-after: always;
         display: block !important;
         position: relative;
         margin: 0 !important;
         background: white !important;
+    }
+
+    .paper-sheet:not(:last-child) {
+        page-break-after: always;
     }
 
     /* Letter size for print */
