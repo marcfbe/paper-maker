@@ -102,6 +102,7 @@ class PaperMaker {
         this.lineColorInput = document.getElementById('lineColor');
         this.lineThicknessInput = document.getElementById('lineThickness');
         this.lineThicknessValue = document.getElementById('lineThicknessValue');
+        this.showBackgroundInput = document.getElementById('showBackground');
 
         // Buttons
         this.printButton = document.getElementById('printButton');
@@ -232,6 +233,11 @@ class PaperMaker {
         this.lineThicknessInput.addEventListener('input', () => {
             this.config.lineThickness = parseFloat(this.lineThicknessInput.value);
             this.lineThicknessValue.textContent = `${this.config.lineThickness}px`;
+            this.updatePreview();
+        });
+
+        this.showBackgroundInput.addEventListener('change', () => {
+            PaperTemplates._showBackground = this.showBackgroundInput.checked;
             this.updatePreview();
         });
 
@@ -462,6 +468,8 @@ class PaperMaker {
         this.lineColorInput.value = this.config.lineColor;
         this.lineThicknessInput.value = this.config.lineThickness;
         this.lineThicknessValue.textContent = `${this.config.lineThickness}px`;
+        this.showBackgroundInput.checked = false;
+        PaperTemplates._showBackground = false;
 
         // Update UI
         this.updateTypeSpecificControls();

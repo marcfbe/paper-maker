@@ -193,6 +193,15 @@ body {
     margin-top: 0.25rem;
 }
 
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    padding: 0.375rem 0;
+    font-size: 0.8125rem;
+}
+
 /* Action Buttons */
 .action-buttons {
     display: flex;
@@ -364,9 +373,11 @@ body {
         color-adjust: exact !important;
     }
 
-    body {
-        margin: 0;
-        padding: 0;
+    html, body {
+        width: 100%;
+        height: auto !important;
+        margin: 0 !important;
+        padding: 0 !important;
         background: white;
     }
 
@@ -377,15 +388,23 @@ body {
     }
 
     .container {
-        display: block;
+        display: block !important;
+        min-height: 0 !important;
+        height: auto !important;
+        margin: 0 !important;
+        padding: 0 !important;
         background: white;
     }
 
     .preview-area {
-        padding: 0;
-        margin: 0;
-        overflow: visible;
-        display: block;
+        position: static !important;
+        top: auto !important;
+        height: auto !important;
+        min-height: 0 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        overflow: visible !important;
+        display: block !important;
         background: white;
     }
 
@@ -402,14 +421,16 @@ body {
         display: block !important;
         position: relative;
         margin: 0 !important;
+        padding: 0 !important;
+        overflow: hidden !important;
         background: white !important;
+        page-break-inside: avoid;
     }
 
     .paper-sheet:not(:last-child) {
         page-break-after: always;
     }
 
-    /* Letter size for print */
     .paper-sheet[data-size="letter"][data-orientation="portrait"] {
         width: 8.5in !important;
         height: 11in !important;
@@ -420,7 +441,6 @@ body {
         height: 8.5in !important;
     }
 
-    /* A4 size for print */
     .paper-sheet[data-size="a4"][data-orientation="portrait"] {
         width: 210mm !important;
         height: 297mm !important;
@@ -431,21 +451,10 @@ body {
         height: 210mm !important;
     }
 
-    /* Ensure SVG scales properly */
     .paper-sheet svg {
         width: 100% !important;
         height: 100% !important;
         display: block !important;
     }
-
-    /* Prevent page breaks inside paper */
-    .paper-sheet {
-        page-break-inside: avoid;
-    }
-}
-
-/* Print page size rules */
-@page :first {
-    margin: 0;
 }
 

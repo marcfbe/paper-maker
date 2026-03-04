@@ -33,6 +33,16 @@ const PaperTemplates = {
         svg.setAttribute('viewBox', `0 0 ${pixelWidth} ${pixelHeight}`);
         svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
 
+        if (this._showBackground) {
+            const bg = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+            bg.setAttribute('x', 0);
+            bg.setAttribute('y', 0);
+            bg.setAttribute('width', pixelWidth);
+            bg.setAttribute('height', pixelHeight);
+            bg.setAttribute('fill', '#f3f6ff');
+            svg.appendChild(bg);
+        }
+
         return svg;
     },
 
