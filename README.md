@@ -2,6 +2,8 @@
 
 A static web application for generating custom printable paper templates including lined paper, graph paper, dot paper, and blank paper with customizable parameters.
 
+NO WARRANTIES, [MIT License](https://github.com/marcfbe/web-paper-maker/blob/main/LICENSE)
+
 ## Features
 
 - **Multiple Paper Types**
@@ -69,7 +71,18 @@ Tested in:
 4. Select "Save as PDF" as the destination to create a PDF file
 5. For best results, use 100% scale (no shrinking or fitting)
 
-## License
+## Deployment
 
-Free to use and modify.
+This site is hosted on GitHub Pages at [paper.marcf.be](https://paper.marcf.be).
 
+## Contributions
+
+All contributions are welcome! Read our [Contribution Guidelines](CONTRIBUTING.md), fork this repo, and create a pull request.
+
+## About
+
+Made with ❤ in Canada
+
+Copyright 2026 Marc Bernard
+
+Follow [@marcf.be](https://bsky.app/profile/marcf.be) on Bluesky and [@marcfbe](https://linkedin.com/in/marcfbe) or LinkedIn
